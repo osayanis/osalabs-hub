@@ -74,6 +74,8 @@ export default function Hub() {
   const mouseY = useMotionValue(0);
   const haloX = useSpring(mouseX, { stiffness: 50, damping: 20 });
   const haloY = useSpring(mouseY, { stiffness: 50, damping: 20 });
+  
+  const [stats, setStats] = useState({ users: 0, rooms: 0, commits: 0, ping: 0 });
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -83,6 +85,27 @@ export default function Hub() {
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [mouseX, mouseY]);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const start = Date.now();
+        const res = await fetch('/api/stats');
+        const data = await res.json();
+        const latency = Date.now() - start;
+        
+        setStats({
+          users: data.activeUsers,
+          rooms: data.activeRooms,
+          commits: data.commits,
+          ping: latency
+        });
+      } catch (err) {}
+    };
+    fetchStats();
+    const interval = setInterval(fetchStats, 10000); // refresh every 10s
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="min-h-screen relative overflow-hidden flex flex-col items-center p-6 sm:p-10">
@@ -126,10 +149,10 @@ export default function Hub() {
         {/* Live Stats Row */}
         <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { label: "Utilisateurs Actifs", value: "24", icon: Activity, color: "text-green-400" },
-            { label: "Salons Ouverts", value: "3", icon: Music, color: "text-pink-400" },
-            { label: "Commits", value: "128", icon: Terminal, color: "text-purple-400" },
-            { label: "Ping", value: "14ms", icon: Server, color: "text-blue-400" },
+            { label: "Utilisateurs Actifs", value: stats.users || "...", icon: Activity, color: "text-green-400" },
+            { label: "Salons Ouverts", value: stats.rooms || "...", icon: Music, color: "text-pink-400" },
+            { label: "Commits", value: stats.commits || "...", icon: Terminal, color: "text-purple-400" },
+            { label: "Ping", value: stats.ping ? `${stats.ping}ms` : "...", icon: Server, color: "text-blue-400" },
           ].map((stat, i) => (
             <motion.div 
               initial={{ y: 20, opacity: 0 }}
