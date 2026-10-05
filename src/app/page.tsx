@@ -185,16 +185,16 @@ export default function Hub() {
               </div>
             </TiltCard>
 
-            <TiltCard className="opacity-60">
-              <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center mb-4 text-white/40">
+            <TiltCard href="https://osadrop.osalabs.fr" className="hover:bg-white/5 transition-colors cursor-pointer">
+              <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mb-4 text-blue-500">
                 <Rocket className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Projet Secret</h3>
-              <p className="text-white/40 text-sm font-medium leading-relaxed">
-                En cours de développement dans les laboratoires OsaLabs. Retournez ici bientôt.
+              <h3 className="text-xl font-bold mb-2">OsaDrop</h3>
+              <p className="text-white/50 text-sm font-medium leading-relaxed">
+                Partage de fichiers P2P ultra-rapide et 100% sécurisé via WebRTC. Zéro stockage serveur.
               </p>
-              <div className="mt-4 flex items-center gap-2 text-white/30 text-sm font-bold">
-                Bientôt disponible
+              <div className="mt-4 flex items-center gap-2 text-blue-400 text-sm font-bold">
+                Lancer l'App <ArrowRight className="w-4 h-4" />
               </div>
             </TiltCard>
           </div>
@@ -207,8 +207,15 @@ export default function Hub() {
             <div className="relative border-l-2 border-white/10 ml-3 space-y-8">
               
               <div className="relative pl-6">
-                <div className="absolute w-3 h-3 bg-pink-500 rounded-full -left-[7px] top-1.5 shadow-[0_0_10px_rgba(236,72,153,0.8)]" />
-                <span className="text-xs font-bold text-pink-400 mb-1 block">Aujourd'hui</span>
+                <div className="absolute w-3 h-3 bg-blue-500 rounded-full -left-[7px] top-1.5 shadow-[0_0_10px_rgba(59,130,246,0.8)]" />
+                <span className="text-xs font-bold text-blue-400 mb-1 block">Aujourd'hui</span>
+                <h4 className="text-lg font-bold mb-1">Lancement de OsaDrop</h4>
+                <p className="text-white/50 text-sm">Système de transfert de fichiers P2P serverless via WebRTC.</p>
+              </div>
+
+              <div className="relative pl-6">
+                <div className="absolute w-3 h-3 bg-pink-500 rounded-full -left-[7px] top-1.5" />
+                <span className="text-xs font-bold text-pink-400 mb-1 block">La semaine dernière</span>
                 <h4 className="text-lg font-bold mb-1">Refonte OsaLabs Hub v2</h4>
                 <p className="text-white/50 text-sm">Déploiement de la nouvelle architecture Next.js avec effets 3D et Glassmorphism.</p>
               </div>
