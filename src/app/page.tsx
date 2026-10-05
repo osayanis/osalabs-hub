@@ -1,8 +1,8 @@
-import Image from "next/image";
 "use client";
+import Image from "next/image";
 
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { Music, Rocket, ArrowRight, Activity, Terminal, Github, Twitter, CircleDot, Server } from "lucide-react";
+import { Music, Rocket, ArrowRight, Activity, Terminal, Github, Twitter, CircleDot, Server, MonitorUp } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 
@@ -198,6 +198,32 @@ export default function Hub() {
                 Lancer l'App <ArrowRight className="w-4 h-4" />
               </div>
             </TiltCard>
+
+            <TiltCard href="https://osacast.osalabs.fr" className="hover:bg-white/5 transition-colors cursor-pointer">
+              <div className="w-12 h-12 bg-indigo-500/10 rounded-xl flex items-center justify-center mb-4 text-indigo-500">
+                <MonitorUp className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">OsaCast</h3>
+              <p className="text-white/50 text-sm font-medium leading-relaxed">
+                Partage d'écran instantané en P2P via WebRTC. Montre ton écran en 1 clic, sans rien installer.
+              </p>
+              <div className="mt-4 flex items-center gap-2 text-indigo-400 text-sm font-bold">
+                Lancer l'App <ArrowRight className="w-4 h-4" />
+              </div>
+            </TiltCard>
+
+            <TiltCard href="https://osaboard.osalabs.fr" className="hover:bg-white/5 transition-colors cursor-pointer">
+              <div className="w-12 h-12 bg-teal-500/10 rounded-xl flex items-center justify-center mb-4 text-teal-500">
+                <CircleDot className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">OsaBoard</h3>
+              <p className="text-white/50 text-sm font-medium leading-relaxed">
+                Tableau blanc collaboratif temps réel. Dessinez à plusieurs sans latence avec WebRTC.
+              </p>
+              <div className="mt-4 flex items-center gap-2 text-teal-400 text-sm font-bold">
+                Lancer l'App <ArrowRight className="w-4 h-4" />
+              </div>
+            </TiltCard>
           </div>
         </section>
 
@@ -208,8 +234,15 @@ export default function Hub() {
             <div className="relative border-l-2 border-white/10 ml-3 space-y-8">
               
               <div className="relative pl-6">
-                <div className="absolute w-3 h-3 bg-blue-500 rounded-full -left-[7px] top-1.5 shadow-[0_0_10px_rgba(59,130,246,0.8)]" />
-                <span className="text-xs font-bold text-blue-400 mb-1 block">Aujourd'hui</span>
+                <div className="absolute w-3 h-3 bg-teal-500 rounded-full -left-[7px] top-1.5 shadow-[0_0_10px_rgba(20,184,166,0.8)]" />
+                <span className="text-xs font-bold text-teal-400 mb-1 block">Aujourd'hui</span>
+                <h4 className="text-lg font-bold mb-1">Lancement de OsaBoard & OsaCast</h4>
+                <p className="text-white/50 text-sm">Tableau blanc P2P sans latence et partage d'écran WebRTC.</p>
+              </div>
+
+              <div className="relative pl-6">
+                <div className="absolute w-3 h-3 bg-blue-500 rounded-full -left-[7px] top-1.5" />
+                <span className="text-xs font-bold text-blue-400 mb-1 block">Ce matin</span>
                 <h4 className="text-lg font-bold mb-1">Lancement de OsaDrop</h4>
                 <p className="text-white/50 text-sm">Système de transfert de fichiers P2P serverless via WebRTC.</p>
               </div>
