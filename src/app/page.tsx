@@ -1,3 +1,4 @@
+import Image from "next/image";
 "use client";
 
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
@@ -173,8 +174,8 @@ export default function Hub() {
           <h2 className="text-2xl font-bold tracking-tight border-b border-white/10 pb-4">Projets en production</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <TiltCard href="https://osaparty.osalabs.fr" className="hover:bg-white/5 transition-colors cursor-pointer">
-              <div className="w-12 h-12 bg-pink-500/10 rounded-xl flex items-center justify-center mb-4 text-pink-500">
-                <Music className="w-6 h-6" />
+              <div className="relative w-12 h-12 rounded-xl overflow-hidden mb-4 border border-white/10 shadow-[0_0_15px_rgba(236,72,153,0.3)]">
+                <Image src="/osaparty_logo.jpg" alt="OsaParty Logo" fill className="object-cover" unoptimized={true} />
               </div>
               <h3 className="text-xl font-bold mb-2">OsaParty</h3>
               <p className="text-white/50 text-sm font-medium leading-relaxed">
