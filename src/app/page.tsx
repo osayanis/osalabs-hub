@@ -172,11 +172,11 @@ export default function Hub() {
         <section className="space-y-6">
           <h2 className="text-2xl font-bold tracking-tight border-b border-white/10 pb-4">Projets en production</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <TiltCard href="https://listenparty.osalabs.fr" className="hover:bg-white/5 transition-colors cursor-pointer">
+            <TiltCard href="https://osaparty.osalabs.fr" className="hover:bg-white/5 transition-colors cursor-pointer">
               <div className="w-12 h-12 bg-pink-500/10 rounded-xl flex items-center justify-center mb-4 text-pink-500">
                 <Music className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-bold mb-2">ListenParty</h3>
+              <h3 className="text-xl font-bold mb-2">OsaParty</h3>
               <p className="text-white/50 text-sm font-medium leading-relaxed">
                 Écoutez Spotify ou Apple Music en temps réel avec vos amis, synchronisé à la seconde près.
               </p>
@@ -223,7 +223,7 @@ export default function Hub() {
               <div className="relative pl-6">
                 <div className="absolute w-3 h-3 bg-white/20 rounded-full -left-[7px] top-1.5" />
                 <span className="text-xs font-bold text-white/40 mb-1 block">T4 2026</span>
-                <h4 className="text-lg font-bold mb-1 text-white/70">ListenParty Mac Bridge</h4>
+                <h4 className="text-lg font-bold mb-1 text-white/70">OsaParty Mac Bridge</h4>
                 <p className="text-white/40 text-sm">Sortie de l'application compagnon Mac OS pour le pilotage d'Apple Music local.</p>
               </div>
 
