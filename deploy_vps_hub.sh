@@ -1,4 +1,10 @@
 #!/bin/bash
-sshpass -p 'wF^f9C:G5yQ*' scp -r -o StrictHostKeyChecking=no /Users/yanisb/Documents/osalabs-hub/src root@141.11.103.154:/var/www/osalabs-hub-next/
-sshpass -p 'wF^f9C:G5yQ*' scp -r -o StrictHostKeyChecking=no /Users/yanisb/Documents/osalabs-hub/public root@141.11.103.154:/var/www/osalabs-hub-next/
-sshpass -p 'wF^f9C:G5yQ*' ssh -o StrictHostKeyChecking=no root@141.11.103.154 'cd /var/www/osalabs-hub-next && npm run build && pm2 restart hub'
+# Déploiement du Hub sur le VPS.
+# Auth par clé SSH — plus aucun mot de passe en dur.
+# Prérequis (une seule fois) : ssh-copy-id "$VPS"
+set -euo pipefail
+
+VPS="${VPS:-root@141.11.103.154}"
+
+scp -r src public "$VPS:/var/www/osalabs-hub-next/"
+ssh "$VPS" 'cd /var/www/osalabs-hub-next && npm run build && pm2 restart hub'
