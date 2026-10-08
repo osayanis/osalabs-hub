@@ -1,278 +1,153 @@
 "use client";
 import Image from "next/image";
-
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { Music, Rocket, ArrowRight, Activity, Terminal, Github, Twitter, CircleDot, Server, MonitorUp } from "lucide-react";
-import { useEffect, useState, useRef } from "react";
+import { Rocket, ArrowUpRight, MonitorUp, PenLine, Music, CircleDot } from "lucide-react";
+import { useRef } from "react";
 import Link from "next/link";
 
-// 3D Tilt Card Component
-const TiltCard = ({ children, href, className = "" }: { children: React.ReactNode, href?: string, className?: string }) => {
+// Carte avec une légère inclinaison 3D au survol.
+const TiltCard = ({ children, href }: { children: React.ReactNode; href?: string }) => {
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  
-  const mouseXSpring = useSpring(x, { stiffness: 300, damping: 30 });
-  const mouseYSpring = useSpring(y, { stiffness: 300, damping: 30 });
+  const mx = useSpring(x, { stiffness: 300, damping: 30 });
+  const my = useSpring(y, { stiffness: 300, damping: 30 });
+  const rotateX = useTransform(my, [-0.5, 0.5], ["6deg", "-6deg"]);
+  const rotateY = useTransform(mx, [-0.5, 0.5], ["-6deg", "6deg"]);
 
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-    x.set(xPct);
-    y.set(yPct);
+    const r = ref.current.getBoundingClientRect();
+    x.set((e.clientX - r.left) / r.width - 0.5);
+    y.set((e.clientY - r.top) / r.height - 0.5);
   };
+  const onLeave = () => { x.set(0); y.set(0); };
 
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
-
-  const content = (
+  const card = (
     <motion.div
       ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        rotateX,
-        rotateY,
-        transformStyle: "preserve-3d",
-      }}
-      className={`glass-card rounded-2xl p-6 relative group ${className}`}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+      className="glass-card rounded-2xl p-6 h-full transition-colors hover:border-white/15"
     >
-      <div style={{ transform: "translateZ(30px)" }} className="relative z-10">
-        {children}
-      </div>
-      {/* Glare effect */}
-      <motion.div
-        className="absolute inset-0 z-0 bg-gradient-to-tr from-white/0 via-white/5 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl"
-        style={{ transform: "translateZ(10px)" }}
-      />
+      <div style={{ transform: "translateZ(24px)" }}>{children}</div>
     </motion.div>
   );
 
-  if (href) {
-    return (
-      <Link href={href} className="block perspective-1000" style={{ perspective: "1000px" }}>
-        {content}
-      </Link>
-    );
-  }
-
-  return <div style={{ perspective: "1000px" }}>{content}</div>;
+  return href ? (
+    <Link href={href} target="_blank" style={{ perspective: "1000px" }} className="block">{card}</Link>
+  ) : (
+    <div style={{ perspective: "1000px" }}>{card}</div>
+  );
 };
 
+const projects = [
+  { name: "OsaParty", href: "https://osaparty.osalabs.fr", logo: "/osaparty_logo.jpg", icon: Music,
+    desc: "Écoute synchronisée : lancez le même morceau, à la seconde, entre amis." },
+  { name: "OsaDrop", href: "https://osadrop.osalabs.fr", icon: Rocket,
+    desc: "Transfert de fichiers P2P via WebRTC. Aucun stockage serveur." },
+  { name: "OsaCast", href: "https://osacast.osalabs.fr", icon: MonitorUp,
+    desc: "Partage d'écran instantané en P2P. Un clic, rien à installer." },
+  { name: "OsaBoard", href: "https://osaboard.osalabs.fr", icon: PenLine,
+    desc: "Tableau blanc collaboratif en temps réel, sans latence." },
+];
+
+const timeline = [
+  { when: "Aujourd'hui", title: "OsaCast & OsaBoard", desc: "Partage d'écran WebRTC et tableau blanc collaboratif." },
+  { when: "Cette semaine", title: "OsaDrop", desc: "Transfert de fichiers P2P sans serveur." },
+  { when: "À venir", title: "OsaNotch", desc: "L'app compagnon macOS : encoche vivante, pont Apple Music.", soon: true },
+];
+
 export default function Hub() {
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const haloX = useSpring(mouseX, { stiffness: 50, damping: 20 });
-  const haloY = useSpring(mouseY, { stiffness: 50, damping: 20 });
-  
-  const [stats, setStats] = useState({ users: 0, rooms: 0, commits: 0, ping: 0 });
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX - 250);
-      mouseY.set(e.clientY - 250);
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [mouseX, mouseY]);
-
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const start = Date.now();
-        const res = await fetch('/api/stats');
-        const data = await res.json();
-        const latency = Date.now() - start;
-        
-        setStats({
-          users: data.activeUsers,
-          rooms: data.activeRooms,
-          commits: data.commits,
-          ping: latency
-        });
-      } catch (err) {}
-    };
-    fetchStats();
-    const interval = setInterval(fetchStats, 10000); // refresh every 10s
-    return () => clearInterval(interval);
-  }, []);
-
   return (
-    <div className="min-h-screen relative overflow-hidden flex flex-col items-center p-6 sm:p-10">
-      
-      {/* Interactive Halos */}
-      <motion.div 
-        style={{ x: haloX, y: haloY }}
-        className="fixed top-0 left-0 w-[500px] h-[500px] bg-pink-500/20 blur-[120px] rounded-full pointer-events-none z-0"
-      />
-      <div className="fixed bottom-[-10%] right-[-5%] w-[600px] h-[600px] bg-purple-600/15 blur-[150px] rounded-full pointer-events-none z-0" />
+    <div className="min-h-screen relative overflow-hidden flex flex-col items-center px-6 py-10 sm:py-16">
+      {/* Halo unique, discret */}
+      <div className="fixed top-[-20%] left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-[radial-gradient(ellipse_at_center,rgba(120,80,220,0.14)_0%,transparent_70%)] pointer-events-none z-0" />
 
-      {/* Top Navbar */}
-      <div className="w-full max-w-4xl flex justify-between items-center relative z-10 mb-16">
-        <div className="font-bold text-xl tracking-tighter">OsaLabs</div>
-        <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-2 rounded-full backdrop-blur-md">
-          <CircleDot className="w-4 h-4 text-green-400 animate-pulse" />
-          <span className="text-sm font-medium text-white/80">All Systems Operational</span>
+      {/* Barre du haut */}
+      <nav className="w-full max-w-3xl flex justify-between items-center relative z-10 mb-24">
+        <span className="font-semibold text-[15px] tracking-tight">OsaLabs</span>
+        <div className="flex items-center gap-2 text-[13px] text-white/50">
+          <CircleDot className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Tous les services en ligne</span>
         </div>
-      </div>
+      </nav>
 
-      <div className="w-full max-w-4xl relative z-10 space-y-16 pb-20">
-        
-        {/* Header Section */}
-        <section className="text-center space-y-6">
-          <motion.div 
-            initial={{ scale: 0.8, opacity: 0 }}
+      <main className="w-full max-w-3xl relative z-10 space-y-24 pb-24">
+        {/* Hero */}
+        <section className="text-center">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="w-24 h-24 mx-auto bg-gradient-to-br from-pink-500 to-purple-600 rounded-[2rem] p-1 shadow-[0_0_40px_-10px_rgba(236,72,153,0.4)]"
+            transition={{ duration: 0.5 }}
+            className="w-16 h-16 mx-auto mb-8 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center"
           >
-            <div className="w-full h-full bg-[#0a0a0a] rounded-[1.8rem] flex items-center justify-center">
-              <span className="text-3xl font-black bg-gradient-to-br from-white to-white/60 bg-clip-text text-transparent">Osa</span>
-            </div>
+            <span className="text-lg font-semibold tracking-tight">Osa</span>
           </motion.div>
-          
-          <h1 className="text-5xl font-extrabold tracking-tight">Le Labo de Yanis</h1>
-          <p className="text-white/50 text-xl font-medium max-w-xl mx-auto">
-            Design premium. Code exigeant. Découvrez l'écosystème OsaLabs.
-          </p>
+
+          <motion.h1
+            initial={{ y: 12, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.05 }}
+            className="text-5xl sm:text-6xl font-semibold tracking-[-0.03em] leading-[1.05]"
+          >
+            Le labo de Yanis
+          </motion.h1>
+          <motion.p
+            initial={{ y: 12, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.12 }}
+            className="mt-5 text-lg text-white/45 max-w-md mx-auto leading-relaxed"
+          >
+            Un écosystème d'outils temps réel, pensés avec soin.
+          </motion.p>
         </section>
 
-        {/* Live Stats Row */}
-        <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[
-            { label: "Utilisateurs Actifs", value: stats.users || "...", icon: Activity, color: "text-green-400" },
-            { label: "Salons Ouverts", value: stats.rooms || "...", icon: Music, color: "text-pink-400" },
-            { label: "Commits", value: stats.commits || "...", icon: Terminal, color: "text-purple-400" },
-            { label: "Ping", value: stats.ping ? `${stats.ping}ms` : "...", icon: Server, color: "text-blue-400" },
-          ].map((stat, i) => (
-            <motion.div 
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: i * 0.1 }}
-              key={i} 
-              className="glass-card rounded-2xl p-4 flex flex-col items-center justify-center text-center"
-            >
-              <stat.icon className={`w-6 h-6 mb-2 ${stat.color}`} />
-              <div className="text-2xl font-bold">{stat.value}</div>
-              <div className="text-xs text-white/40 uppercase font-bold tracking-wider">{stat.label}</div>
-            </motion.div>
-          ))}
-        </section>
-
-        {/* Projects Grid */}
-        <section className="space-y-6">
-          <h2 className="text-2xl font-bold tracking-tight border-b border-white/10 pb-4">Projets en production</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <TiltCard href="https://osaparty.osalabs.fr" className="hover:bg-white/5 transition-colors cursor-pointer">
-              <div className="relative w-12 h-12 rounded-xl overflow-hidden mb-4 border border-white/10 shadow-[0_0_15px_rgba(236,72,153,0.3)]">
-                <Image src="/osaparty_logo.jpg" alt="OsaParty Logo" fill className="object-cover" unoptimized={true} />
-              </div>
-              <h3 className="text-xl font-bold mb-2">OsaParty</h3>
-              <p className="text-white/50 text-sm font-medium leading-relaxed">
-                Écoutez Spotify ou Apple Music en temps réel avec vos amis, synchronisé à la seconde près.
-              </p>
-              <div className="mt-4 flex items-center gap-2 text-pink-400 text-sm font-bold">
-                Lancer l'App <ArrowRight className="w-4 h-4" />
-              </div>
-            </TiltCard>
-
-            <TiltCard href="https://osadrop.osalabs.fr" className="hover:bg-white/5 transition-colors cursor-pointer">
-              <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mb-4 text-blue-500">
-                <Rocket className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold mb-2">OsaDrop</h3>
-              <p className="text-white/50 text-sm font-medium leading-relaxed">
-                Partage de fichiers P2P ultra-rapide et 100% sécurisé via WebRTC. Zéro stockage serveur.
-              </p>
-              <div className="mt-4 flex items-center gap-2 text-blue-400 text-sm font-bold">
-                Lancer l'App <ArrowRight className="w-4 h-4" />
-              </div>
-            </TiltCard>
-
-            <TiltCard href="https://osacast.osalabs.fr" className="hover:bg-white/5 transition-colors cursor-pointer">
-              <div className="w-12 h-12 bg-indigo-500/10 rounded-xl flex items-center justify-center mb-4 text-indigo-500">
-                <MonitorUp className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold mb-2">OsaCast</h3>
-              <p className="text-white/50 text-sm font-medium leading-relaxed">
-                Partage d'écran instantané en P2P via WebRTC. Montre ton écran en 1 clic, sans rien installer.
-              </p>
-              <div className="mt-4 flex items-center gap-2 text-indigo-400 text-sm font-bold">
-                Lancer l'App <ArrowRight className="w-4 h-4" />
-              </div>
-            </TiltCard>
-
-            <TiltCard href="https://osaboard.osalabs.fr" className="hover:bg-white/5 transition-colors cursor-pointer">
-              <div className="w-12 h-12 bg-teal-500/10 rounded-xl flex items-center justify-center mb-4 text-teal-500">
-                <CircleDot className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold mb-2">OsaBoard</h3>
-              <p className="text-white/50 text-sm font-medium leading-relaxed">
-                Tableau blanc collaboratif temps réel. Dessinez à plusieurs sans latence avec WebRTC.
-              </p>
-              <div className="mt-4 flex items-center gap-2 text-teal-400 text-sm font-bold">
-                Lancer l'App <ArrowRight className="w-4 h-4" />
-              </div>
-            </TiltCard>
+        {/* Projets */}
+        <section>
+          <h2 className="text-[13px] font-medium uppercase tracking-[0.18em] text-white/35 mb-6">Projets</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {projects.map((p) => (
+              <TiltCard key={p.name} href={p.href}>
+                <div className="flex items-center gap-3 mb-4">
+                  {p.logo ? (
+                    <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-white/10">
+                      <Image src={p.logo} alt={p.name} fill className="object-cover" unoptimized />
+                    </div>
+                  ) : (
+                    <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/80">
+                      <p.icon className="w-5 h-5" />
+                    </div>
+                  )}
+                  <h3 className="text-lg font-semibold tracking-tight">{p.name}</h3>
+                  <ArrowUpRight className="w-4 h-4 text-white/30 ml-auto" />
+                </div>
+                <p className="text-sm text-white/45 leading-relaxed">{p.desc}</p>
+              </TiltCard>
+            ))}
           </div>
         </section>
 
-        {/* Roadmap */}
-        <section className="space-y-6">
-          <h2 className="text-2xl font-bold tracking-tight border-b border-white/10 pb-4">Roadmap & Journal</h2>
-          <div className="glass-card rounded-2xl p-6 md:p-8">
-            <div className="relative border-l-2 border-white/10 ml-3 space-y-8">
-              
-              <div className="relative pl-6">
-                <div className="absolute w-3 h-3 bg-teal-500 rounded-full -left-[7px] top-1.5 shadow-[0_0_10px_rgba(20,184,166,0.8)]" />
-                <span className="text-xs font-bold text-teal-400 mb-1 block">Aujourd'hui</span>
-                <h4 className="text-lg font-bold mb-1">Lancement de OsaBoard & OsaCast</h4>
-                <p className="text-white/50 text-sm">Tableau blanc P2P sans latence et partage d'écran WebRTC.</p>
+        {/* Journal */}
+        <section>
+          <h2 className="text-[13px] font-medium uppercase tracking-[0.18em] text-white/35 mb-6">Journal</h2>
+          <div className="relative border-l border-white/10 ml-1.5 space-y-8">
+            {timeline.map((t, i) => (
+              <div key={i} className="relative pl-6">
+                <div className={`absolute w-2 h-2 rounded-full -left-[4.5px] top-2 ${t.soon ? "bg-white/25" : "bg-white"}`} />
+                <span className="text-xs text-white/35">{t.when}</span>
+                <h4 className={`text-[15px] font-medium mt-0.5 ${t.soon ? "text-white/60" : "text-white"}`}>{t.title}</h4>
+                <p className="text-sm text-white/40 mt-0.5 leading-relaxed">{t.desc}</p>
               </div>
-
-              <div className="relative pl-6">
-                <div className="absolute w-3 h-3 bg-blue-500 rounded-full -left-[7px] top-1.5" />
-                <span className="text-xs font-bold text-blue-400 mb-1 block">Ce matin</span>
-                <h4 className="text-lg font-bold mb-1">Lancement de OsaDrop</h4>
-                <p className="text-white/50 text-sm">Système de transfert de fichiers P2P serverless via WebRTC.</p>
-              </div>
-
-              <div className="relative pl-6">
-                <div className="absolute w-3 h-3 bg-pink-500 rounded-full -left-[7px] top-1.5" />
-                <span className="text-xs font-bold text-pink-400 mb-1 block">La semaine dernière</span>
-                <h4 className="text-lg font-bold mb-1">Refonte OsaLabs Hub v2</h4>
-                <p className="text-white/50 text-sm">Déploiement de la nouvelle architecture Next.js avec effets 3D et Glassmorphism.</p>
-              </div>
-
-              <div className="relative pl-6">
-                <div className="absolute w-3 h-3 bg-white/20 rounded-full -left-[7px] top-1.5" />
-                <span className="text-xs font-bold text-white/40 mb-1 block">T4 2026</span>
-                <h4 className="text-lg font-bold mb-1 text-white/70">OsaParty Mac Bridge</h4>
-                <p className="text-white/40 text-sm">Sortie de l'application compagnon Mac OS pour le pilotage d'Apple Music local.</p>
-              </div>
-
-              <div className="relative pl-6">
-                <div className="absolute w-3 h-3 bg-white/20 rounded-full -left-[7px] top-1.5" />
-                <span className="text-xs font-bold text-white/40 mb-1 block">2027</span>
-                <h4 className="text-lg font-bold mb-1 text-white/70">API Publique OsaLabs</h4>
-                <p className="text-white/40 text-sm">Ouverture des endpoints temps réel pour les développeurs tiers.</p>
-              </div>
-
-            </div>
+            ))}
           </div>
         </section>
+      </main>
 
-      </div>
+      <footer className="relative z-10 text-[13px] text-white/25">
+        OsaLabs · Yanis
+      </footer>
     </div>
   );
 }
