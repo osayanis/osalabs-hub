@@ -1,16 +1,20 @@
 "use client";
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { Rocket, ArrowUpRight, MonitorUp, PenLine, Music } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Rocket, ArrowUpRight, MonitorUp, PenLine, Music,
+  Clock, Headphones, MessageCircle, Zap, Infinity as InfinityIcon, QrCode,
+  MousePointerClick, Gauge, Globe, Users, Activity, Share2,
+} from "lucide-react";
+import { useState } from "react";
 import Link from "next/link";
 
-/* ---------- Petits composants "canvas" façon Figma ---------- */
+/* ---------- Composants "canvas" façon Figma ---------- */
 
-// Cadre de sélection avec poignées aux coins.
 function Frame({ color, children, className = "", style }: { color: string; children: React.ReactNode; className?: string; style?: React.CSSProperties }) {
   const handle = "absolute w-3 h-3 rounded-[3px] bg-[#1a1a1a] border-2";
   return (
-    <div className={`relative inline-block ${className}`} style={{ ...style }}>
+    <div className={`relative inline-block ${className}`} style={style}>
       <div className="absolute inset-0 rounded-[6px] border-2 pointer-events-none" style={{ borderColor: color }} />
       <div className={handle} style={{ top: -6, left: -6, borderColor: color }} />
       <div className={handle} style={{ top: -6, right: -6, borderColor: color }} />
@@ -21,28 +25,34 @@ function Frame({ color, children, className = "", style }: { color: string; chil
   );
 }
 
-// Curseur multijoueur (flèche + étiquette).
 function Cursor({ color, label, className = "", style }: { color: string; label?: string; className?: string; style?: React.CSSProperties }) {
   return (
     <div className={`absolute flex items-start gap-1 ${className}`} style={style}>
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={{ filter: "drop-shadow(0 2px 3px rgba(0,0,0,0.4))" }}>
         <path d="M5 3l5 15 2.5-6.5L19 9 5 3z" fill={color} stroke="#1a1a1a" strokeWidth="1.5" strokeLinejoin="round" />
       </svg>
-      {label && (
-        <span className="text-[11px] font-bold px-2 py-0.5 rounded-full text-[#1a1a1a] font-display" style={{ background: color }}>{label}</span>
-      )}
+      {label && <span className="text-[11px] font-bold px-2 py-0.5 rounded-full text-[#1a1a1a] font-display" style={{ background: color }}>{label}</span>}
     </div>
   );
 }
 
-// Mascotte Osa (fantôme crème, clin d'œil au Notch).
 function Mascot({ size = 40 }: { size?: number }) {
   return (
     <div className="relative" style={{ width: size, height: size }}>
-      <div className="absolute inset-0 rounded-[42%] bg-[#fdfcf7] shadow-inner" />
+      <div className="absolute inset-0 rounded-[42%] bg-[#fdfcf7]" />
       <div className="absolute rounded-full bg-[#2a2a2a]" style={{ width: size * 0.16, height: size * 0.2, top: size * 0.36, left: size * 0.3 }} />
       <div className="absolute rounded-full bg-[#2a2a2a]" style={{ width: size * 0.16, height: size * 0.2, top: size * 0.36, left: size * 0.56 }} />
     </div>
+  );
+}
+
+// Coup de crayon : trait tracé à la main, faible opacité.
+function PencilStroke({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 300 36" fill="none" className={className} preserveAspectRatio="none" aria-hidden>
+      <path d="M6 24C56 12 110 10 160 16c40 5 84 2 134-8" stroke="currentColor" strokeWidth="9" strokeLinecap="round" opacity="0.5" />
+      <path d="M12 30C70 22 128 26 182 22c36-3 72-6 104-14" stroke="currentColor" strokeWidth="4" strokeLinecap="round" opacity="0.35" />
+    </svg>
   );
 }
 
@@ -51,7 +61,7 @@ const float = (d: number, delay = 0) => ({
   transition: { duration: d, repeat: Infinity, ease: "easeInOut" as const, delay },
 });
 
-/* ---------- Cartes projets ---------- */
+/* ---------- Projets + fonctionnalités ---------- */
 
 const projects = [
   { name: "OsaParty", href: "https://osaparty.osalabs.fr", logo: "/osaparty_logo.jpg", icon: Music, color: "#ec4899",
@@ -64,47 +74,123 @@ const projects = [
     desc: "Tableau blanc collaboratif en temps réel, sans latence." },
 ];
 
-function ProjectCard({ p, i }: { p: typeof projects[number]; i: number }) {
+type Feat = { icon: React.ElementType; title: string; desc: string };
+const FEATURES: Record<string, Feat[]> = {
+  OsaParty: [
+    { icon: Clock, title: "À la seconde", desc: "Lecture alignée pour tout le monde." },
+    { icon: Headphones, title: "Spotify & Apple Music", desc: "Ton app, ton compte." },
+    { icon: MessageCircle, title: "Chat & réactions", desc: "L'ambiance en direct." },
+  ],
+  OsaDrop: [
+    { icon: Zap, title: "P2P WebRTC", desc: "Direct, sans serveur." },
+    { icon: InfinityIcon, title: "Taille illimitée", desc: "Envoi par morceaux." },
+    { icon: QrCode, title: "Code ou QR", desc: "Partage en 2 secondes." },
+  ],
+  OsaCast: [
+    { icon: MousePointerClick, title: "Écran en 1 clic", desc: "Capture native." },
+    { icon: Gauge, title: "Latence minime", desc: "Flux pair-à-pair." },
+    { icon: Globe, title: "Zéro install", desc: "Tout dans le navigateur." },
+  ],
+  OsaBoard: [
+    { icon: Users, title: "Collaboratif", desc: "Dessinez à plusieurs." },
+    { icon: Activity, title: "Temps réel", desc: "Sans latence perceptible." },
+    { icon: Share2, title: "Nœuds & liens", desc: "Basé sur React Flow." },
+  ],
+};
+
+const expel = [
+  { x: -140, y: -70, r: -14 },
+  { x: 140, y: -70, r: 14 },
+  { x: -140, y: 70, r: 14 },
+  { x: 140, y: 70, r: -12 },
+];
+const tilt = [-6, 5, -4];
+
+function FeatureCard({ f, color, angle }: { f: Feat; color: string; angle: number }) {
   return (
     <motion.div
-      initial={{ y: 24, opacity: 0 }}
-      whileInView={{ y: 0, opacity: 1 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.45, delay: i * 0.07 }}
-      whileHover={{ y: -5, rotate: i % 2 ? 0.6 : -0.6 }}
+      initial={{ opacity: 0, scale: 0.6, rotate: 0 }}
+      animate={{ opacity: 1, scale: 1, rotate: angle }}
+      exit={{ opacity: 0, scale: 0.6, rotate: 0 }}
+      transition={{ type: "spring", stiffness: 260, damping: 20 }}
+      className="h-full rounded-3xl p-5 bg-white/[0.06] border border-white/15 backdrop-blur-sm shadow-xl flex flex-col"
     >
-      <Link href={p.href} target="_blank"
-        className="group block rounded-3xl p-6 bg-white/[0.04] border border-white/10 hover:border-white/25 transition-colors relative overflow-hidden">
-        <div className="absolute -top-16 -right-10 w-40 h-40 rounded-full blur-3xl opacity-0 group-hover:opacity-40 transition-opacity" style={{ background: p.color }} />
-        <div className="relative flex items-center gap-3 mb-4">
-          {p.logo ? (
-            <div className="relative w-11 h-11 rounded-2xl overflow-hidden border-2" style={{ borderColor: p.color }}>
-              <Image src={p.logo} alt={p.name} fill className="object-cover" unoptimized />
-            </div>
-          ) : (
-            <div className="w-11 h-11 rounded-2xl flex items-center justify-center text-[#1a1a1a]" style={{ background: p.color }}>
-              <p.icon className="w-5 h-5" />
-            </div>
-          )}
-          <h3 className="text-xl font-display font-semibold tracking-tight">{p.name}</h3>
-          <div className="ml-auto w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-[#1a1a1a] transition-colors">
-            <ArrowUpRight className="w-4 h-4" />
-          </div>
-        </div>
-        <p className="relative text-sm text-white/50 leading-relaxed">{p.desc}</p>
-      </Link>
+      <div className="w-full h-20 rounded-2xl mb-4 flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${color}, ${color}66)` }}>
+        <f.icon className="w-8 h-8 text-white" />
+      </div>
+      <h4 className="font-display font-semibold text-[15px]">{f.title}</h4>
+      <p className="text-xs text-white/55 mt-1 leading-relaxed">{f.desc}</p>
     </motion.div>
+  );
+}
+
+function ProjectsShowcase() {
+  const [active, setActive] = useState<string | null>(null);
+
+  return (
+    <div
+      className="relative grid grid-cols-1 sm:grid-cols-2 gap-5"
+      style={{ perspective: 1200 }}
+      onMouseLeave={() => setActive(null)}
+    >
+      {projects.map((p, i) => {
+        const isActive = active === p.name;
+        const feats = active ? FEATURES[active] : null;
+        // index de ce créneau parmi les non-survolés → quelle fonctionnalité afficher
+        const featIdx = active ? projects.filter((x) => x.name !== active).findIndex((x) => x.name === p.name) : -1;
+
+        return (
+          <div key={p.name} className="relative min-h-[150px]" onMouseEnter={() => setActive(p.name)}>
+            <AnimatePresence mode="popLayout">
+              {active && !isActive && feats ? (
+                <motion.div key="feat" className="absolute inset-0">
+                  <FeatureCard f={feats[featIdx] ?? feats[0]} color={projects.find((x) => x.name === active)!.color} angle={tilt[featIdx] ?? 0} />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="card"
+                  layout
+                  animate={isActive ? { scale: 1.04, y: -4 } : { scale: 1, x: 0, y: 0, rotate: 0 }}
+                  exit={{ x: expel[i].x, y: expel[i].y, rotate: expel[i].r, opacity: 0, scale: 0.8 }}
+                  transition={{ type: "spring", stiffness: 240, damping: 22 }}
+                  className="absolute inset-0"
+                >
+                  <Link href={p.href} target="_blank"
+                    className="group block h-full rounded-3xl p-6 bg-white/[0.04] border border-white/10 hover:border-white/25 transition-colors relative overflow-hidden">
+                    <div className="absolute -top-16 -right-10 w-40 h-40 rounded-full blur-3xl opacity-0 group-hover:opacity-40 transition-opacity" style={{ background: p.color }} />
+                    <div className="relative flex items-center gap-3 mb-4">
+                      {p.logo ? (
+                        <div className="relative w-11 h-11 rounded-2xl overflow-hidden border-2" style={{ borderColor: p.color }}>
+                          <Image src={p.logo} alt={p.name} fill className="object-cover" unoptimized />
+                        </div>
+                      ) : (
+                        <div className="w-11 h-11 rounded-2xl flex items-center justify-center text-white" style={{ background: p.color }}>
+                          <p.icon className="w-5 h-5" />
+                        </div>
+                      )}
+                      <h3 className="text-xl font-display font-semibold tracking-tight">{p.name}</h3>
+                      <div className="ml-auto w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-[#1a1a1a] transition-colors">
+                        <ArrowUpRight className="w-4 h-4" />
+                      </div>
+                    </div>
+                    <p className="relative text-sm text-white/50 leading-relaxed">{p.desc}</p>
+                  </Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        );
+      })}
+    </div>
   );
 }
 
 export default function Hub() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#1a1a1a]">
-      {/* léger quadrillage de "canvas" */}
       <div className="fixed inset-0 z-0 opacity-[0.04] pointer-events-none"
         style={{ backgroundImage: "linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px)", backgroundSize: "44px 44px" }} />
 
-      {/* Barre du haut */}
       <nav className="relative z-20 flex justify-between items-center px-6 sm:px-10 py-6">
         <span className="font-display font-semibold text-lg tracking-tight">OsaLabs</span>
         <div className="flex items-center gap-2 text-[13px] text-white/60 bg-white/5 border border-white/10 rounded-full px-3 py-1.5">
@@ -116,68 +202,47 @@ export default function Hub() {
       {/* HERO canvas */}
       <section className="relative z-10 min-h-[82vh] flex flex-col items-center justify-center px-4">
         <div className="relative">
-          {/* Tag écosystème (violet) */}
           <motion.div {...float(5)} className="absolute -top-20 left-2 sm:left-6 z-20 -rotate-3">
-            <Frame color="#a78bfa">
-              <span className="block px-5 py-2 font-display font-semibold text-2xl sm:text-3xl text-[#a78bfa]">ÉCOSYSTÈME</span>
-            </Frame>
+            <Frame color="#a78bfa"><span className="block px-5 py-2 font-display font-semibold text-2xl sm:text-3xl text-[#a78bfa]">ÉCOSYSTÈME</span></Frame>
           </motion.div>
-
-          {/* Mascotte (rose) */}
           <motion.div {...float(6, 0.5)} className="absolute -top-24 right-0 sm:-right-4 z-20 rotate-6">
-            <Frame color="#f472b6">
-              <div className="p-3"><Mascot size={44} /></div>
-            </Frame>
+            <Frame color="#f472b6"><div className="p-3"><Mascot size={44} /></div></Frame>
           </motion.div>
-
-          {/* Pastille année (verte) + curseur */}
           <motion.div {...float(4.5, 0.2)} className="absolute top-2 -left-24 sm:-left-36 z-20 hidden sm:block">
             <span className="font-display font-bold text-sm px-4 py-1.5 rounded-full bg-emerald-300 text-[#1a1a1a]">2026</span>
             <Cursor color="#6ee7b7" style={{ top: -6, right: -22 }} />
           </motion.div>
-
-          {/* Bulle HI (jaune) */}
           <motion.div {...float(5.5, 0.8)} className="absolute -top-16 -right-28 sm:-right-40 z-20 hidden sm:block">
             <span className="font-display font-bold text-sm px-4 py-1.5 rounded-2xl rounded-bl-sm bg-amber-300 text-[#1a1a1a]">SALUT !</span>
           </motion.div>
 
-          {/* Titre principal (bleu) */}
           <Frame color="#4f9dfb">
-            <h1 className="px-6 sm:px-10 py-4 font-display font-bold tracking-tight text-white text-6xl sm:text-8xl lg:text-9xl leading-none select-none">
-              OsaLabs
-            </h1>
+            <h1 className="px-6 sm:px-10 py-4 font-display font-bold tracking-tight text-white text-6xl sm:text-8xl lg:text-9xl leading-none select-none">OsaLabs</h1>
           </Frame>
 
-          {/* Pastille nom (bleu) + curseur */}
           <motion.div {...float(5, 0.4)} className="absolute -bottom-16 right-2 sm:right-8 z-20">
-            <div className="flex items-center gap-2 font-display font-bold text-base sm:text-lg px-5 py-2.5 rounded-full bg-[#4f9dfb] text-white shadow-lg shadow-[#4f9dfb]/30">
-              PAR YANIS <Mascot size={22} />
-            </div>
+            <div className="flex items-center gap-2 font-display font-bold text-base sm:text-lg px-5 py-2.5 rounded-full bg-[#4f9dfb] text-white shadow-lg shadow-[#4f9dfb]/30">PAR YANIS <Mascot size={22} /></div>
             <Cursor color="#4f9dfb" style={{ top: -14, left: -18 }} />
           </motion.div>
         </div>
 
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="mt-28 text-center text-lg sm:text-xl text-white/45 max-w-lg"
-        >
+        <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="mt-28 text-center text-lg sm:text-xl text-white/45 max-w-lg">
           Un écosystème d'outils temps réel, pensés avec soin.
         </motion.p>
       </section>
 
-      {/* Contenu */}
       <main className="relative z-10 max-w-5xl mx-auto px-6 pb-28 space-y-20">
         <section id="projets" className="scroll-mt-24">
           <h2 className="font-display text-sm font-semibold uppercase tracking-[0.18em] text-white/40 mb-8">Projets</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {projects.map((p, i) => <ProjectCard key={p.name} p={p} i={i} />)}
-          </div>
+          <ProjectsShowcase />
+          <p className="text-center text-xs text-white/25 mt-5">Survole un projet pour découvrir ce qu'il fait ✦</p>
         </section>
 
         <section>
-          <h2 className="font-display text-sm font-semibold uppercase tracking-[0.18em] text-white/40 mb-8">Journal</h2>
+          <div className="relative inline-block mb-8">
+            <h2 className="font-display text-sm font-semibold uppercase tracking-[0.18em] text-white/40 relative z-10">Journal</h2>
+            <PencilStroke className="absolute -bottom-3 -left-2 w-32 h-5 text-white/20" />
+          </div>
           <div className="relative border-l border-white/10 ml-1.5 space-y-8">
             {[
               { when: "Aujourd'hui", title: "OsaCast & OsaBoard", desc: "Partage d'écran WebRTC et tableau blanc collaboratif.", c: "#14b8a6" },
