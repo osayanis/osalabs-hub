@@ -102,7 +102,7 @@ function GithubBubble() {
   return (
     <div className="relative" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
       {/* Fond assombri */}
-      <div className={`fixed inset-0 bg-black/80 transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0 pointer-events-none"}`} style={{ zIndex: 30 }} />
+      <div className={`fixed inset-0 bg-black/80 transition-opacity duration-150 ${open ? "opacity-100" : "opacity-0 pointer-events-none"}`} style={{ zIndex: 30 }} />
 
       <AnimatePresence>
         {open && (
@@ -110,13 +110,16 @@ function GithubBubble() {
             href={`https://github.com/${GH_USER}`}
             target="_blank" rel="noopener noreferrer"
             initial={{ opacity: 0, y: 14, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 14, scale: 0.9 }}
-            transition={{ type: "spring", stiffness: 300, damping: 24 }}
+            animate={{ opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 320, damping: 24 } }}
+            exit={{ opacity: 0, y: 10, scale: 0.94, transition: { duration: 0.12, ease: "easeIn" } }}
             className="absolute bottom-full right-0 mb-4 z-40 block w-[272px] rounded-3xl bg-[#0d1117] border border-white/10 p-5 shadow-2xl"
           >
             <div className="flex items-center justify-between mb-3">
-              <span className="font-display font-semibold text-white capitalize">{monthName}</span>
+              <div className="flex items-center gap-2">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={`https://github.com/${GH_USER}.png?size=64`} alt="@osayanis" className="w-7 h-7 rounded-full border border-white/10 object-cover" />
+                <span className="font-display font-semibold text-white capitalize">{monthName}</span>
+              </div>
               <span className="flex items-center gap-1.5 text-[11px] text-white/40">
                 <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 005.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 8 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
                 GitHub
