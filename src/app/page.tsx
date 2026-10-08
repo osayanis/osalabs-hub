@@ -326,6 +326,35 @@ export default function Hub() {
           <p className="text-center text-xs text-white/25 mt-5">Survole un projet pour découvrir ce qu'il fait ✦</p>
         </section>
 
+        {/* OsaNotch — app macOS */}
+        <section>
+          <motion.a
+            href="https://notch.osalabs.fr" target="_blank" rel="noopener noreferrer"
+            initial={{ y: 24, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.5 }}
+            whileHover={{ y: -4 }}
+            className="group relative flex flex-col sm:flex-row items-center gap-8 rounded-3xl p-8 sm:p-10 overflow-hidden border border-white/10 bg-gradient-to-br from-white/[0.07] to-white/[0.02] hover:border-white/25 transition-colors"
+          >
+            <div className="absolute -top-24 left-1/3 w-64 h-64 rounded-full blur-3xl opacity-20 group-hover:opacity-40 transition-opacity" style={{ background: "radial-gradient(circle,#b7a5ff,transparent 70%)" }} />
+            {/* mini encoche + mascotte */}
+            <div className="relative flex-none">
+              <div className="w-40 h-[76px] rounded-b-[26px] bg-black/80 border border-white/10 border-t-0 flex items-start justify-center pt-5">
+                <div className="scale-110"><Mascot size={40} /></div>
+              </div>
+            </div>
+            <div className="relative flex-1 text-center sm:text-left">
+              <span className="font-display text-xs font-semibold uppercase tracking-[0.18em] text-[#b7a5ff]">Nouveau · macOS</span>
+              <h3 className="font-display text-3xl font-bold tracking-tight mt-2">OsaNotch</h3>
+              <p className="text-white/50 mt-2 max-w-md mx-auto sm:mx-0 leading-relaxed">Ton encoche prend vie : mascotte réactive, musique &amp; paroles, réglages, transferts et agenda — tout au même endroit.</p>
+            </div>
+            <span className="relative flex-none font-display font-bold text-[#1a1a1a] bg-white px-6 py-3 rounded-full inline-flex items-center gap-2 group-hover:gap-3 transition-all">
+              Découvrir <ArrowUpRight className="w-4 h-4" />
+            </span>
+          </motion.a>
+        </section>
+
         <section>
           <div className="relative inline-block mb-8">
             <h2 className="font-display text-sm font-semibold uppercase tracking-[0.18em] text-white/40 relative z-10">Journal</h2>
