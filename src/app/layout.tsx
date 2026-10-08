@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Fredoka } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+const fredoka = Fredoka({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-fredoka",
   display: "swap",
 });
 
@@ -19,8 +26,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className={inter.variable}>
-      <body className="antialiased bg-[#050505] text-white">
+    <html lang="fr" className={`${inter.variable} ${fredoka.variable}`}>
+      <body className="antialiased bg-[#1a1a1a] text-white">
         {children}
       </body>
     </html>
