@@ -45,3 +45,14 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Grille du canvas + projecteur qui suit la souris */
+.osa-grid {
+  background-image: linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+.osa-spot {
+  -webkit-mask-image: radial-gradient(circle 240px at var(--mx, -999px) var(--my, -999px), #000, transparent);
+  mask-image: radial-gradient(circle 240px at var(--mx, -999px) var(--my, -999px), #000, transparent);
+}
+html { scroll-behavior: smooth; }
