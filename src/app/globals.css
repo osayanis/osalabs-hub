@@ -56,3 +56,6 @@ body {
   mask-image: radial-gradient(circle 240px at var(--mx, -999px) var(--my, -999px), #000, transparent);
 }
 html { scroll-behavior: smooth; }
+
+/* Pages « façon OsaNotch » (OsaWallpaper, pages légales) : police Bricolage chargée dans leur layout */
+.osa-display { font-family: var(--font-osa-display), system-ui, sans-serif; letter-spacing: -0.02em; }
