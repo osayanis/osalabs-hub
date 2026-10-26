@@ -27,7 +27,7 @@ export function WallpaperShowcase() {
       <div ref={ref} onMouseMove={move} onMouseLeave={() => { mx.set(0); my.set(0); }} className="order-2 lg:order-1" style={{ perspective: 1200 }}>
         <motion.a href="/wallpaper" style={{ rotateX: rx, rotateY: ry }}
           className="block rounded-[18px] p-1.5 bg-gradient-to-b from-white/20 to-white/[0.04] shadow-[0_40px_80px_-30px_rgba(123,45,95,0.9)]">
-          <img src="/wallpaper/lockscreen.jpg" alt="OsaWallpaper sur l’écran verrouillé d’un Mac" width={1600} height={1040} loading="lazy"
+          <img src="/wallpaper/shots/lock-both.jpg" alt="OsaWallpaper sur l’écran verrouillé d’un Mac : une photo de la Voie lactée, l’heure et le lecteur" width={1600} height={1040} loading="lazy"
             className="w-full h-auto rounded-[13px] block" />
         </motion.a>
       </div>
@@ -39,7 +39,7 @@ export function WallpaperShowcase() {
           <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight">OsaWallpaper</h2>
         </div>
         <p className="text-white/55 mt-4 leading-relaxed max-w-md">
-          Ton écran verrouillé prend les couleurs de ta musique : la pochette en fond, l’heure en grand, un lecteur en verre et les paroles.
+          Ton écran verrouillé prend les couleurs de ta musique, ou la photo 4K, la vidéo YouTube et les vues aériennes d’Apple que tu choisis. L’heure en grand, un lecteur en verre, les paroles.
           Et partout, des pastilles AirPods, charge, volume et luminosité.
         </p>
         <div className="flex flex-wrap gap-3 mt-7">
