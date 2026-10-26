@@ -50,7 +50,7 @@ export function WallpaperShowcase() {
             <Download className="w-4 h-4" /> Télécharger
           </a>
         </div>
-        <p className="text-xs text-white/30 mt-4">macOS 14 ou plus récent · gratuit et open source</p>
+        <p className="text-xs text-white/30 mt-4">macOS 14 ou plus récent · gratuit, code source public</p>
       </div>
     </div>
   );

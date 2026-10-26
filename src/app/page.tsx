@@ -10,6 +10,7 @@ import { Projects } from "@/components/hub/Projects";
 import { NotchShowcase } from "@/components/hub/NotchShowcase";
 import { WallpaperShowcase } from "@/components/hub/WallpaperShowcase";
 import { PROJECTS, useStatus, type AppId, type Status } from "@/components/hub/data";
+import { LEGAL } from "@/components/osa/Kit";
 
 /* ---------- Pastille de statut (vrai ping des sites) ---------- */
 
@@ -245,6 +246,8 @@ export default function Hub() {
             <a href="https://notch.osalabs.fr" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">OsaNotch</a>
             <a href="/wallpaper" className="hover:text-white transition">OsaWallpaper</a>
             <a href="https://github.com/osayanis" target="_blank" rel="noopener noreferrer" className="hover:text-white transition inline-flex items-center gap-1">GitHub <ArrowUpRight className="w-3.5 h-3.5" /></a>
+            <span className="basis-full h-0" />
+            {LEGAL.map((l) => <a key={l.href} href={l.href} className="font-medium text-white/25 hover:text-white transition">{l.name}</a>)}
           </div>
         </div>
       </footer>
