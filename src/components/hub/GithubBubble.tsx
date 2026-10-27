@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Cursor, Face } from "./Canvas";
 
@@ -11,6 +11,14 @@ const LEVELS = ["#262626", "#0e4429", "#006d32", "#26a641", "#39d353"];
 
 export function GithubBubble() {
   const [open, setOpen] = useState(false);
+  // Fermeture un court instant après la sortie : le temps de passer de la pastille à la bulle.
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const show = () => { if (closeTimer.current) clearTimeout(closeTimer.current); setOpen(true); };
+  const hide = (delay = 150) => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(() => setOpen(false), delay);
+  };
+  useEffect(() => () => { if (closeTimer.current) clearTimeout(closeTimer.current); }, []);
   const [levelByDate, setLevelByDate] = useState<Record<string, number>>({});
 
   useEffect(() => {
@@ -43,9 +51,11 @@ export function GithubBubble() {
   for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7));
 
   return (
-    <div className="relative" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
-      {/* Fond assombri */}
-      <div className={`fixed inset-0 bg-black/80 transition-opacity duration-150 ${open ? "opacity-100" : "opacity-0 pointer-events-none"}`} style={{ zIndex: 30 }} />
+    <>
+    {/* Fond assombri : en dehors de la zone survolée (sinon la souris y serait toujours « dedans »
+        et la bulle ne se fermerait qu'en quittant la page). Le toucher ferme aussi la bulle. */}
+    <div onClick={() => hide(0)} className={`fixed inset-0 bg-black/80 transition-opacity duration-150 ${open ? "opacity-100" : "opacity-0 pointer-events-none"}`} style={{ zIndex: 30 }} />
+    <div className="relative" onMouseEnter={show} onMouseLeave={() => hide()}>
 
       <AnimatePresence>
         {open && (
@@ -88,11 +98,12 @@ export function GithubBubble() {
       </AnimatePresence>
 
       {/* La pastille */}
-      <div className="relative z-40 flex items-center gap-2 font-display font-bold text-base sm:text-lg px-5 py-2.5 rounded-full bg-[#4f9dfb] text-white shadow-lg shadow-[#4f9dfb]/30 cursor-pointer">
+      <div onClick={() => (open ? hide(0) : show())} className="relative z-40 flex items-center gap-2 font-display font-bold text-base sm:text-lg px-5 py-2.5 rounded-full bg-[#4f9dfb] text-white shadow-lg shadow-[#4f9dfb]/30 cursor-pointer">
         PAR YANIS <Face size={22} />
       </div>
       <Cursor color="#4f9dfb" style={{ top: -14, left: -18 }} />
     </div>
+    </>
   );
 }
 
