@@ -9,6 +9,7 @@ import { GithubBubble } from "@/components/hub/GithubBubble";
 import { Projects } from "@/components/hub/Projects";
 import { NotchShowcase } from "@/components/hub/NotchShowcase";
 import { WallpaperShowcase } from "@/components/hub/WallpaperShowcase";
+import { BootShowcase } from "@/components/hub/BootShowcase";
 import { PROJECTS, useStatus, type AppId, type Status } from "@/components/hub/data";
 import { LEGAL } from "@/components/osa/Kit";
 
@@ -89,6 +90,7 @@ const BUDDY: Record<AppId, { say: string; mood: Mood; holding?: "file" | "screen
 };
 
 const JOURNAL = [
+  { when: "28 oct.", title: "OsaBoot", desc: "Nouvelle app Mac : une clé USB qui démarre, comme balenaEtcher, et même une clé d’installation Windows 11. Avec la mascotte aux commandes.", c: "#f472b6" },
   { when: "26 oct.", title: "OsaWallpaper", desc: "Nouvelle app Mac : ton écran verrouillé prend les couleurs de ta musique, avec des pastilles AirPods, charge, volume et luminosité.", c: "#f0876a" },
   { when: "11 oct.", title: "OsaNotch × OsaDrop", desc: "Un fichier envoyé depuis le site arrive maintenant directement dans l’encoche.", c: "#7cc4ff" },
   { when: "9 oct.", title: "Trois sites redessinés", desc: "OsaParty, OsaDrop et OsaCast prennent l’allure de l’encoche, avec une mascotte qui réagit à tout.", c: "#f9a8d4" },
@@ -132,7 +134,7 @@ export default function Hub() {
           <Face size={26} /> OsaLabs
         </a>
         <div className="hidden md:flex items-center gap-1 text-[13px] font-semibold text-white/50 bg-white/[0.04] border border-white/10 rounded-full p-1">
-          {[["Projets", "#projets"], ["OsaNotch", "#osanotch"], ["OsaWallpaper", "#osawallpaper"], ["Journal", "#journal"]].map(([t, h]) => (
+          {[["Projets", "#projets"], ["OsaNotch", "#osanotch"], ["OsaWallpaper", "#osawallpaper"], ["OsaBoot", "#osaboot"], ["Journal", "#journal"]].map(([t, h]) => (
             <a key={h} href={h} className="px-3.5 py-1.5 rounded-full hover:bg-white/10 hover:text-white transition">{t}</a>
           ))}
         </div>
@@ -210,6 +212,10 @@ export default function Hub() {
           <WallpaperShowcase />
         </section>
 
+        <section id="osaboot" className="scroll-mt-24">
+          <BootShowcase />
+        </section>
+
         <section id="journal" className="scroll-mt-24 grid md:grid-cols-[220px_1fr] gap-8">
           <div className="md:sticky md:top-24 self-start">
             <div className="relative inline-block">
@@ -245,6 +251,7 @@ export default function Hub() {
             {PROJECTS.map((p) => <a key={p.id} href={p.href} target="_blank" rel="noopener noreferrer" className="hover:text-white transition">{p.name}</a>)}
             <a href="https://notch.osalabs.fr" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">OsaNotch</a>
             <a href="/wallpaper" className="hover:text-white transition">OsaWallpaper</a>
+            <a href="/boot" className="hover:text-white transition">OsaBoot</a>
             <a href="https://github.com/osayanis" target="_blank" rel="noopener noreferrer" className="hover:text-white transition inline-flex items-center gap-1">GitHub <ArrowUpRight className="w-3.5 h-3.5" /></a>
             <span className="basis-full h-0" />
             {LEGAL.map((l) => <a key={l.href} href={l.href} className="font-medium text-white/25 hover:text-white transition">{l.name}</a>)}
