@@ -6,10 +6,11 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import { AnimatePresence, motion } from "framer-motion";
 
 export type Notice = { id: number; text: string; icon?: string; tone?: "info" | "good" | "bad" | "game" };
-export type App = "osadrop" | "osacast" | "osaparty" | "osawallpaper" | "osalabs";
+export type App = "osadrop" | "osacast" | "osaparty" | "osawallpaper" | "osaboot" | "osalabs";
 
 export const APPS: { id: App | "osanotch"; name: string; href: string }[] = [
   { id: "osawallpaper", name: "OsaWallpaper", href: "/wallpaper" },
+  { id: "osaboot", name: "OsaBoot", href: "/boot" },
   { id: "osadrop", name: "OsaDrop", href: "https://osadrop.osalabs.fr" },
   { id: "osacast", name: "OsaCast", href: "https://osacast.osalabs.fr" },
   { id: "osaparty", name: "OsaParty", href: "https://osaparty.osalabs.fr" },
