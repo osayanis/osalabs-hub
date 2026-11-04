@@ -183,6 +183,17 @@ export function BootPage() {
           </OsaBox>
         </div>
 
+        {/* ───────── EraseKEY ───────── */}
+        <a href="/erasekey" className="group w-full mt-16 rounded-[28px] border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] transition p-4 sm:p-5 grid sm:grid-cols-[240px_1fr_auto] gap-5 items-center">
+          <img src="/erasekey/disques-deux.webp" alt="L’écran EraseKEY : la liste des disques du PC" width={1600} height={900} loading="lazy" className="w-full h-auto rounded-2xl border border-white/10" />
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#4ade80]">Et aussi : EraseKEY</p>
+            <p className="osa-display text-2xl font-extrabold mt-1.5 leading-tight">Une clé qui efface un PC, pour de bon.</p>
+            <p className="text-sm text-white/50 mt-1.5 leading-relaxed">OsaBoot fabrique aussi une clé qui démarre un PC et réécrit tout son disque, en français, avec un rapport PDF à la fin.</p>
+          </div>
+          <span className="justify-self-start sm:justify-self-end h-11 px-5 rounded-full bg-white/[0.08] group-hover:bg-white/[0.14] font-semibold flex items-center gap-2 transition">Voir <ArrowUpRight className="w-4 h-4" /></span>
+        </a>
+
         {/* ───────── Dernier appel ───────── */}
         <div className="w-full mt-16 rounded-[36px] overflow-hidden relative border border-white/10" onMouseEnter={() => setZone("download")} onMouseLeave={() => setZone(null)}
           style={{ background: `radial-gradient(circle at 15% 100%, ${ACCENT}55, transparent 55%), radial-gradient(circle at 90% 0%, ${ACCENT2}44, transparent 50%), #111114` }}>
