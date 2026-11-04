@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import Mascot, { type Mood } from "@/components/osa/Mascot";
 import { Island, OsaBox, Pill, Shell, useNotices } from "@/components/osa/Kit";
+import { ViaHub } from "@/components/osahub/links";
 
 export const DMG = "https://github.com/osayanis/osawallpaper/releases/latest/download/OsaWallpaper.dmg";
 export const REPO = "https://github.com/osayanis/osawallpaper";
@@ -114,6 +115,7 @@ export function WallpaperPage() {
         <p className="text-[11px] text-white/35 mt-3 flex items-center gap-1.5">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-300" /> Gratuit, code public · macOS 14 ou plus récent · Music ou Spotify
         </p>
+        <ViaHub className="mt-2 justify-center" />
 
         <div className="w-full mt-12" onMouseEnter={() => setZone("lock")} onMouseLeave={() => setZone(null)}>
           <HeroShots />
@@ -215,6 +217,7 @@ export function WallpaperPage() {
               <Download className="w-4 h-4" /> Télécharger OsaWallpaper
             </a>
             <p className="text-[11px] text-white/50 mt-3">Gratuit · macOS 14 ou plus récent · 1 Mo</p>
+            <ViaHub className="mt-3 justify-center" />
           </div>
         </div>
 

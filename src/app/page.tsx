@@ -11,6 +11,7 @@ import { NotchShowcase } from "@/components/hub/NotchShowcase";
 import { WallpaperShowcase } from "@/components/hub/WallpaperShowcase";
 import { BootShowcase } from "@/components/hub/BootShowcase";
 import { EraseKeyShowcase } from "@/components/hub/EraseKeyShowcase";
+import { OsaHubShowcase } from "@/components/hub/OsaHubShowcase";
 import { PROJECTS, useStatus, type AppId, type Status } from "@/components/hub/data";
 import { LEGAL } from "@/components/osa/Kit";
 
@@ -91,6 +92,7 @@ const BUDDY: Record<AppId, { say: string; mood: Mood; holding?: "file" | "screen
 };
 
 const JOURNAL = [
+  { when: "4 nov.", title: "OsaHUB", desc: "Nouvelle app Mac : elle installe et met à jour OsaNotch, OsaWallpaper et OsaBoot, et se met à jour toute seule. Une seule mascotte dans la barre des menus.", c: "#b9bcff" },
   { when: "4 nov.", title: "EraseKEY", desc: "Une clé USB, créée par OsaBoot, qui démarre un PC et efface vraiment ses disques. En français, avec la mascotte, rapport PDF à la clé. Testée sur un vrai Dell.", c: "#4ade80" },
   { when: "28 oct.", title: "OsaBoot", desc: "Nouvelle app Mac : une clé USB qui démarre, comme balenaEtcher, et même une clé d’installation Windows 11. Avec la mascotte aux commandes.", c: "#f472b6" },
   { when: "26 oct.", title: "OsaWallpaper", desc: "Nouvelle app Mac : ton écran verrouillé prend les couleurs de ta musique, avec des pastilles AirPods, charge, volume et luminosité.", c: "#f0876a" },
@@ -136,7 +138,7 @@ export default function Hub() {
           <Face size={26} /> OsaLabs
         </a>
         <div className="hidden md:flex items-center gap-1 text-[13px] font-semibold text-white/50 bg-white/[0.04] border border-white/10 rounded-full p-1">
-          {[["Projets", "#projets"], ["OsaNotch", "#osanotch"], ["OsaWallpaper", "#osawallpaper"], ["OsaBoot", "#osaboot"], ["EraseKEY", "#erasekey"], ["Journal", "#journal"]].map(([t, h]) => (
+          {[["Projets", "#projets"], ["OsaHUB", "#osahub"], ["OsaNotch", "#osanotch"], ["OsaWallpaper", "#osawallpaper"], ["OsaBoot", "#osaboot"], ["EraseKEY", "#erasekey"], ["Journal", "#journal"]].map(([t, h]) => (
             <a key={h} href={h} className="px-3.5 py-1.5 rounded-full hover:bg-white/10 hover:text-white transition">{t}</a>
           ))}
         </div>
@@ -206,6 +208,10 @@ export default function Hub() {
           <Projects status={status} onActive={setHovered} />
         </section>
 
+        <section id="osahub" className="scroll-mt-24">
+          <OsaHubShowcase />
+        </section>
+
         <section id="osanotch" ref={notchRef} className="scroll-mt-24">
           <NotchShowcase />
         </section>
@@ -255,6 +261,7 @@ export default function Hub() {
           </div>
           <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold text-white/40">
             {PROJECTS.map((p) => <a key={p.id} href={p.href} target="_blank" rel="noopener noreferrer" className="hover:text-white transition">{p.name}</a>)}
+            <a href="/osahub" className="hover:text-white transition">OsaHUB</a>
             <a href="https://notch.osalabs.fr" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">OsaNotch</a>
             <a href="/wallpaper" className="hover:text-white transition">OsaWallpaper</a>
             <a href="/boot" className="hover:text-white transition">OsaBoot</a>

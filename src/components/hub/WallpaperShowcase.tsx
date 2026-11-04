@@ -5,6 +5,7 @@
 import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowUpRight, Download } from "lucide-react";
+import { ViaHub } from "@/components/osahub/links";
 import { DMG } from "@/components/wallpaper/WallpaperPage";
 
 const SUNSET = "#f0876a", PLUM = "#7b2d5f";
@@ -51,6 +52,7 @@ export function WallpaperShowcase() {
           </a>
         </div>
         <p className="text-xs text-white/30 mt-4">macOS 14 ou plus récent · gratuit, code source public</p>
+        <ViaHub className="mt-2" />
       </div>
     </div>
   );

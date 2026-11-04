@@ -5,6 +5,7 @@
 import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowUpRight, Download } from "lucide-react";
+import { ViaHub } from "@/components/osahub/links";
 import { BOOT_DMG } from "@/components/boot/BootPage";
 
 const PINK = "#f472b6", LILAC = "#a78bfa";
@@ -43,6 +44,7 @@ export function BootShowcase() {
           </a>
         </div>
         <p className="text-xs text-white/30 mt-4">Mac Apple Silicon · macOS 14 ou plus récent · gratuit, code source public</p>
+        <ViaHub label="ou installe-le avec OsaHUB" className="mt-2" />
       </div>
 
       <div ref={ref} onMouseMove={move} onMouseLeave={() => { mx.set(0); my.set(0); }} style={{ perspective: 1200 }}>

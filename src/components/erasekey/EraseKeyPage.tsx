@@ -11,6 +11,7 @@ import {
 import Mascot, { type Mood } from "@/components/osa/Mascot";
 import { Island, OsaBox, Pill, Shell, useNotices } from "@/components/osa/Kit";
 import { BOOT_DMG, BOOT_REPO } from "@/components/boot/BootPage";
+import { ViaHub } from "@/components/osahub/links";
 
 export const ERASE_REPO = "https://github.com/osayanis/erasekey";
 const ACCENT = "#f4f4f0";   // le blanc de la console
@@ -224,6 +225,7 @@ export function EraseKeyPage() {
               </a>
             </div>
             <p className="text-[11px] text-white/50 mt-3">OsaBoot : gratuit · Mac Apple Silicon · macOS 14 ou plus récent</p>
+            <ViaHub label="ou installe OsaBoot avec OsaHUB" className="mt-3 justify-center" />
           </div>
         </div>
 

@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import Mascot, { type Mood } from "@/components/osa/Mascot";
 import { Island, OsaBox, Pill, Shell, useNotices } from "@/components/osa/Kit";
+import { ViaHub } from "@/components/osahub/links";
 
 export const BOOT_DMG = "https://github.com/osayanis/osaboot/releases/latest/download/OsaBoot.dmg";
 export const BOOT_REPO = "https://github.com/osayanis/osaboot";
@@ -98,6 +99,7 @@ export function BootPage() {
         <p className="text-[11px] text-white/35 mt-3 flex items-center gap-1.5">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-300" /> Gratuit, code public · Mac Apple Silicon · macOS 14 ou plus récent · bêta
         </p>
+        <ViaHub label="ou installe-le avec OsaHUB" className="mt-2 justify-center" />
 
         <div className="w-full mt-12" onMouseEnter={() => setZone("steps")} onMouseLeave={() => setZone(null)}>
           <Steps />
@@ -204,6 +206,7 @@ export function BootPage() {
               <Download className="w-4 h-4" /> Télécharger OsaBoot
             </a>
             <p className="text-[11px] text-white/50 mt-3">Gratuit · Mac Apple Silicon · macOS 14 ou plus récent · 1,3 Mo</p>
+            <ViaHub label="ou installe-le avec OsaHUB" className="mt-3 justify-center" />
           </div>
         </div>
 

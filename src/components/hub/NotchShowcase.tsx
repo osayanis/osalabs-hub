@@ -5,6 +5,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Download, FileText, Image as ImageIcon, FileArchive, Pause, SkipBack, SkipForward, Volume2 } from "lucide-react";
+import { ViaHub } from "@/components/osahub/links";
 import Mascot from "../osa/Mascot";
 
 type State = "repos" | "musique" | "lecteur" | "fichiers" | "volume";
@@ -155,6 +156,7 @@ export function NotchShowcase() {
           </a>
         </div>
         <p className="text-xs text-white/30 mt-4">macOS 14 ou plus récent</p>
+        <ViaHub className="mt-2" />
       </div>
 
       <div className="relative">
